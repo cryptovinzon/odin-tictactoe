@@ -1,9 +1,8 @@
-//generate board
-let gameboardModule = (function () {
+const gameboardModule = (function () {
     let gameboard = [
-        {value: '1'},
-        {value: '2'},
-        {value: '3'},
+        {value: ''},
+        {value: ''},
+        {value: ''},
         {value: ''},
         {value: ''},
         {value: ''},
@@ -12,17 +11,31 @@ let gameboardModule = (function () {
         {value: ''},
         ];
     
+    let player = 1;
+    function toggleMarker() {        
+        if (player == 1) {
+            player = 2;
+            return "X";
+        } else {
+            player = 1;
+            return "O";
+        }                
+    }
+
     function updateArray(index) {
-        return gameboard[index];
+        gameboard[index].value = "X"
     }
     
     function updateGameboard() {
         // update indivdual div
-        console.log(gameboard);
+        console.table(gameboard);
     }
+
+
     return {
         updateGameboard: updateGameboard,
-        updateArray: updateArray, 
+        updateArray: updateArray,
+        toggleMarker: toggleMarker,
     };
 })();
 
@@ -52,8 +65,9 @@ let gameboardModule = (function () {
 let cells = document.querySelectorAll('[data-cell]');
 cells.forEach((cell) => {
     cell.addEventListener('click', (e) => {
-        console.log(e.target.getAttribute('data-cell'));
-        e.target.textContent.length === 0? e.target.textContent = "X" : alert("pick a different cell!")
+        e.target.textContent.length === 0? e.target.textContent = gameboardModule.toggleMarker() : alert("pick a different cell!");
+        gameboardModule.updateArray((e.target.getAttribute('data-cell')) - 1);
+        gameboardModule.updateGameboard();
     })
 });
 
